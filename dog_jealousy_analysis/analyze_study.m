@@ -1,7 +1,13 @@
 function analyze_study(file_name)
-%analyze_study analyzes each study (csv data).
+%analyze_study analyzes one csv file.
+% It accepts the CSV file name.
+% It displays the times dogs spent on behaviors,
+% their 95% confidence intervals on graphs
+% and builds a table to represent the gender which spent more time
+% on the behavior in each phase and the mode of each behavior
+% to see which gender spent more time on the behavior.
 
-% Extracts data from the csv file
+% Extracts data from the csv file.
 [stress_signals, interaction_with_owner, ...
     interaction_with_stranger, vocalizations, ...
     explore_room, look_at_object, interaction_with_object, ...
@@ -9,13 +15,15 @@ function analyze_study(file_name)
     attention_to_stranger, social_investigation, ...
     female_idx, male_idx] = extract_data(file_name);
 
+% Initializes the list of six phases.
 six_phases = {'BOW', 'BSTR', 'FDOW', 'FDSTR', 'POW', 'PSTR'};
 
-% Creates a matrix to compare the means of time between males and females. 
+% Initializes other variables.
 gender_significance_matrix = [];
 gender_mode = [];
 
-% Analyzes and plots the means on the graph.
+% Analyzes and plots the means of each behavior on the graphs.
+
 % Attention to owner and stranger.
 subplot(3, 4, 1);
 
@@ -88,7 +96,7 @@ for behavior_index = 1:8
     fprintf('%s \n', titles{behavior_index});
     [gender_significance, mode] = eval(sprintf(['analyze_behavior(%s, ', ...
                     'female_idx, male_idx, ''m'', ''b'', six_phases)'], ...
-                                                behaviors{behavior_index}))
+                                                behaviors{behavior_index}));
     gender_significance_matrix = [gender_significance_matrix; ...
                                                     gender_significance];
     gender_mode = [gender_mode; mode];
@@ -113,5 +121,9 @@ gender_significance_table = table(categorical(bow), categorical(bstr), ...
             categorical(pstr), categorical(gender_mode), ...
             'VariableNames', [six_phases, 'Mode'], ...
             'RowNames', row_names);
+
+% Displays the table that shows which gender spent 
+% the most of time on each behavior
 disp(gender_significance_table);
+
 end

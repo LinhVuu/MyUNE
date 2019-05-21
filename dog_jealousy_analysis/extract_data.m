@@ -6,6 +6,8 @@ function [stress_signals, interaction_with_owner, ...
             female_idx, male_idx] = extract_data(file_name)
         
 %extract_data extracts data to behaviors' matrices.
+% It accepts the CSV file name.
+% It returns the times dogs spent on behaviors.
 
 % Opens the csv file to read.
 fid = fopen(file_name,'r') ;
